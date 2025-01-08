@@ -1,5 +1,8 @@
 #include "Parser.hpp"
 
+//return directive count in 1 server block  = 1 
+//client_max_body_size count = 1
+//others ???
 
 //TODO:check count of directives 
 ///location_handlers
