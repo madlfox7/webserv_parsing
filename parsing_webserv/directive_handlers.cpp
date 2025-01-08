@@ -134,8 +134,8 @@ bool isValidPort(const string& port)
 
 bool isValidIP(const string& ip)
  {
-    //  if (ip == "localhost")  
-    //     return true;
+     if (ip == "localhost")  //127.0.0.1:3434 <=> localhost:3434, listen localhost (port 80 by default).. 
+        return true;   // syntax listen ip:port
     std::istringstream iss(ip);
     string byte;
     int byteCount = 0;
@@ -176,7 +176,7 @@ void handleListenDirective(const string& line, std::ifstream&, int&)
     } 
     else
     {
-          if (!isValidPort(arg) && arg != "localhost")
+          if (!isValidPort(arg))
             throw std::runtime_error("⚠ Error: Invalid port number or address.");
     }
 }
