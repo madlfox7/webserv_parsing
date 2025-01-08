@@ -60,7 +60,8 @@ void handleLocation(std::ifstream& file, const string& locationArg, int& serverB
 void handleListenDirective(const string& line, std::ifstream&, int&) ;
 void handleServerNameDirective(const string& line, std::ifstream&, int&) ;
 void handleLocationDirective(const string& line, std::ifstream& file, int& serverBlockDepth) ;
-void handleReturnDirective(const string& line, std::ifstream&, int&) ;
+//void handleReturnDirective(const string& line, std::ifstream&, int&) ;
+void handleReturn(const string& line) ;
 void handleErrorPageDirective(const string& line, std::ifstream&, int&);
 void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&);
 void handleCgi(const string & line);

@@ -28,6 +28,13 @@ void handleAllowMethods(const string& line)
 void handleReturn(const string& line)  //arg count - ? 
 {
     cout << "Handling 'return': " << line << endl;
+      std::vector<string> words = splitLine(line);
+     if (words.size() != 3)
+        throw std::runtime_error("⚠ Error: Invalid 'error_page' directive format. Expect two arguments.");
+
+    // two or one arg is ok? 
+    //examples return 403 (Forbidden) || return status_code Uri
+    //..........
     //TODO: check first arg numeric and is http response code, ex: 404 ... 
     //return 301 http://example.com ??
     //return 301??
@@ -163,7 +170,6 @@ bool isValidIP(const string& ip)
 
 void handleListenDirective(const string& line, std::ifstream&, int&) 
 {    
-    //review and implement later
     //in class we must have variable and function to check listen_count < 0 || > (max_listen_size?) throw err
     cout << "Handling 'listen': " << line << endl;
     std::vector<string> words = splitLine(line);
@@ -201,17 +207,17 @@ void handleServerNameDirective(const string& line, std::ifstream&, int&) //num  
 }
 
 
-void handleReturnDirective(const string& line, std::ifstream&, int&) //arg num = ?
-{
-    cout << "Handling 'return': " << line << endl;
-     std::vector<string> words = splitLine(line);
-     if (words.size() != 3)
-        throw std::runtime_error("⚠ Error: Invalid 'error_page' directive format. Expect two arguments.");
+// void handleReturnDirective(const string& line, std::ifstream&, int&) //arg num = ?
+// {
+//     cout << "Handling 'return': " << line << endl;
+//      std::vector<string> words = splitLine(line);
+//      if (words.size() != 3)
+//         throw std::runtime_error("⚠ Error: Invalid 'error_page' directive format. Expect two arguments.");
 
-    // two or one arg is ok? 
-    //examples return 403 (Forbidden) || return status_code Uri
-    //..........
-}
+//     // two or one arg is ok? 
+//     //examples return 403 (Forbidden) || return status_code Uri
+//     //..........
+// }
 
 void handleErrorPageDirective(const string& line, std::ifstream&, int&)//arg num =?
 {

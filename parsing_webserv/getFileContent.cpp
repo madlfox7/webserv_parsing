@@ -28,14 +28,14 @@ void pars_server(const string& filename)
 
         const string serverDirectives[] = 
         {
-            "listen", "server_name", "location", "return", "error_page", "client_max_body_size"
+            "listen", "server_name", "location",  "error_page", "client_max_body_size"
         };
 
         std::map<string, DirectiveHandler> directiveHandlers;
         directiveHandlers["listen"] = &handleListenDirective;
         directiveHandlers["server_name"] = &handleServerNameDirective;
         directiveHandlers["location"] = &handleLocationDirective;
-        directiveHandlers["return"] = &handleReturnDirective;
+      //  directiveHandlers["return"] = &handleReturnDirective;
         directiveHandlers["error_page"] = &handleErrorPageDirective;
         directiveHandlers["client_max_body_size"] = &handleClientMaxBodySizeDirective;
 
