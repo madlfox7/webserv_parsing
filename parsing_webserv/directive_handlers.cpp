@@ -134,6 +134,8 @@ bool isValidPort(const string& port)
 
 bool isValidIP(const string& ip)
  {
+    //  if (ip == "localhost")  
+    //     return true;
     std::istringstream iss(ip);
     string byte;
     int byteCount = 0;
@@ -174,8 +176,8 @@ void handleListenDirective(const string& line, std::ifstream&, int&)
     } 
     else
     {
-        if (!isValidPort(arg))
-            throw std::runtime_error("⚠ Error: Invalid port number.");
+          if (!isValidPort(arg) && arg != "localhost")
+            throw std::runtime_error("⚠ Error: Invalid port number or address.");
     }
 }
 
