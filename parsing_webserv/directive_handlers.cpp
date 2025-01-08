@@ -211,7 +211,7 @@ void handleReturnDirective(const string& line, std::ifstream&, int&) //arg num =
 void handleErrorPageDirective(const string& line, std::ifstream&, int&)//arg num =?
 {
     cout << "Handling 'error_page': " << line << endl;
-
+    // at least 1 arg
     //error_page code uri
     //error_page code1 code2 code3 same_uri
 

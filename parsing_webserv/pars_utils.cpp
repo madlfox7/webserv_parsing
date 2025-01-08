@@ -7,14 +7,9 @@ void check_extension(const std::string& word, const char* extensions[], int num_
     for (int i = 0; i < num_extensions; ++i)
     {
         const char* ext = extensions[i];
-        // Check if the word ends with the current extension
         if (word.size() >= strlen(ext) && word.substr(word.size() - strlen(ext)) == ext)
-        {
-            return; // Valid extension found
-        }
+            return; 
     }
-
-    // If no valid extension was found, throw an error
     throw std::runtime_error("⚠ Error: expected one of the extensions.");
 }
 
