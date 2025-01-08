@@ -14,6 +14,7 @@
 #include <cstring> 
 #include <sys/stat.h> 
 #include <map>
+#include <climits>
 #include <sstream> 
 
 #define BUFFER_SIZE 1024
@@ -50,7 +51,7 @@ void normalizeFileContent(const string& filename) ;
 bool isAllowedDirective(const string& directive, const string* allowedDirectives, size_t directiveCount) ;
 void checkLineFormat(const string& line, const string& expectedString) ;
 std::vector<string> splitLine(const string& line) ;
-
+void check_extension(const std::string& word, const char* extensions[], int num_extensions); //extension checker func .php .html || server_name extensions .com .org....
 void pars_server(const string& filename) ;
 
 //pars_handlers.cpp
@@ -62,6 +63,6 @@ void handleLocationDirective(const string& line, std::ifstream& file, int& serve
 void handleReturnDirective(const string& line, std::ifstream&, int&) ;
 void handleErrorPageDirective(const string& line, std::ifstream&, int&);
 void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&);
-
+void handleCgi(const string & line);
 
 #endif

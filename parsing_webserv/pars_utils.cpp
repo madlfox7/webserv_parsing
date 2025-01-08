@@ -1,5 +1,25 @@
 #include "Parser.hpp"
 
+
+
+void check_extension(const std::string& word, const char* extensions[], int num_extensions)
+{
+    for (int i = 0; i < num_extensions; ++i)
+    {
+        const char* ext = extensions[i];
+        // Check if the word ends with the current extension
+        if (word.size() >= strlen(ext) && word.substr(word.size() - strlen(ext)) == ext)
+        {
+            return; // Valid extension found
+        }
+    }
+
+    // If no valid extension was found, throw an error
+    throw std::runtime_error("⚠ Error: expected one of the extensions.");
+}
+
+
+
 void checkLineFormat(const string& line, const string& expectedString) 
 {
     if (line != expectedString) 

@@ -23,14 +23,21 @@ void handleAllowMethods(const string& line)
 
 //////////////////////////////////////////////////////////////
 
-void handleReturn(const string& line) 
+void handleReturn(const string& line)  //arg count - ? 
 {
     cout << "Handling 'return': " << line << endl;
+    //TODO: check first arg numeric and matches error code, ex: 404 ... 
+    //second arg check???/ path check??
+    // ...
 }
 
 void handleRoot(const string& line)
  {
     cout << "Handling 'root': " << line << endl;
+    std::vector<string> words = splitLine(line);
+    if (words.size() != 2)
+        throw std::runtime_error("⚠ Error: Invalid number of arguments for 'root'. Expected exactly one argument.");
+   // .. root arg validation ? 
 }
 
 
@@ -46,17 +53,39 @@ void handleAutoindex(const string& line)
 }
 ///////////////////////////////////////////////////////
 
+
 void handleIndex(const string& line) 
 {
     cout << "Handling 'index': " << line << endl;
+    std::vector<string> words = splitLine(line);
+    if (words.size() < 2)
+        throw std::runtime_error("⚠ Error: Invalid number of arguments for 'index' directive");
+   const char* extensions[] = {".php", ".html"}; // index.php || index.html // index.php.hp case -> normal name = ????
+    check_extension(words[1], extensions, 2);
+    // arg num - ? index index.php index.html index.php is ok????
+    return ;
 }
+
+
+//////////////////////////////////////////////////////////////
+
+void handleCgi(const string & line)
+{
+     cout << "Handling 'cgi': " << line << endl;
+    std::vector<string> words = splitLine(line);
+    if (words.size() != 3)
+        throw std::runtime_error("⚠ Error: Invalid number of arguments for 'cgi_extension'. Expected exactly two arguments.");
+    if (words[1] != ".py" && words[1] != ".sh")   /// ".py" or "py"? what about "./py" / symbol???
+        throw std::runtime_error("⚠ Error: Invalid argument for 'autoindex'. Allowed values are 'on' or 'off'.");
+}
+
 
 void handleLocation(std::ifstream& file, const string& locationArg, int& serverBlockDepth) 
 {
     cout << "Handling 'location': " << locationArg << endl;
     const string locationDirectives[] = 
     {
-        "allow_methods", "return", "root", "autoindex", "index"
+        "allow_methods", "return", "root", "autoindex", "index", "cgi_extension"
     };
     std::map<string, void(*)(const string&)> locationDirectiveHandlers;
     locationDirectiveHandlers["allow_methods"] = &handleAllowMethods;
@@ -64,6 +93,7 @@ void handleLocation(std::ifstream& file, const string& locationArg, int& serverB
     locationDirectiveHandlers["root"] = &handleRoot;
     locationDirectiveHandlers["autoindex"] = &handleAutoindex;
     locationDirectiveHandlers["index"] = &handleIndex;
+    locationDirectiveHandlers["cgi_extension"] = &handleCgi;
     string innerLine;
     while (std::getline(file, innerLine)) 
     {
@@ -151,26 +181,43 @@ void handleListenDirective(const string& line, std::ifstream&, int&)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void handleServerNameDirective(const string& line, std::ifstream&, int&) 
+void handleServerNameDirective(const string& line, std::ifstream&, int&) //num  1 < args < ? server_name google.com google.org ... ok???
 {
        cout << "Handling 'server_name': " << line << endl;
+       //.........
 }
 
 
-void handleReturnDirective(const string& line, std::ifstream&, int&) 
+void handleReturnDirective(const string& line, std::ifstream&, int&) //arg num -?
 {
     cout << "Handling 'return': " << line << endl;
+    //..........
 }
 
-void handleErrorPageDirective(const string& line, std::ifstream&, int&)
+void handleErrorPageDirective(const string& line, std::ifstream&, int&)//arg num -?
 {
     cout << "Handling 'error_page': " << line << endl;
+    //................
 }
 
+/////////////////////////////////////////////////////////////////////
 void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&)
 {
     cout << "Handling 'client_max_body_size': " << line << endl;
+    std::vector<string> words = splitLine(line);
+    if (words.size() != 2)
+        throw std::runtime_error("⚠ Error: Invalid 'client_max_body_size' directive format. Expect exactly one argument.");
+    // for (size_t i = 0; i < words[1].size(); ++i)
+    // {
+    //     int num = std::atoi(words[1].c_str());
+    //     if (!isdigit(words[1]) || (num > 0 && num <= INT_MAX))
+    //         throw std::runtime_error("⚠ Error: 'clinet_max_body_size' argument must be a valid number");
+    // }
+    //later change isValidPort into a generic function with two limits, that will check num is valid >0 < INT_MAX || in specified range...
+    //...............
 }
+
+
 
 void handleLocationDirective(const string& line, std::ifstream& file, int& serverBlockDepth) 
 {
