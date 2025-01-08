@@ -186,20 +186,35 @@ void handleListenDirective(const string& line, std::ifstream&, int&)
 void handleServerNameDirective(const string& line, std::ifstream&, int&) //num  1 < args < ? server_name google.com google.org ... ok???
 {
        cout << "Handling 'server_name': " << line << endl;
-       //.........
+        std::vector<string> words = splitLine(line);
+     if (words.size() != 2)
+        throw std::runtime_error("⚠ Error: Invalid 'server_name' directive format. Expect exactly one argument.");
+    //.........
+    //check .com .org in server name || localhost ? 
+    //server name defined by ip?? server_name 127.0.0.1;
+    //can have many args???? 
 }
 
 
-void handleReturnDirective(const string& line, std::ifstream&, int&) //arg num -?
+void handleReturnDirective(const string& line, std::ifstream&, int&) //arg num = ?
 {
     cout << "Handling 'return': " << line << endl;
+     std::vector<string> words = splitLine(line);
+     if (words.size() != 3)
+        throw std::runtime_error("⚠ Error: Invalid 'error_page' directive format. Expect two arguments.");
+
+    // two or one arg is ok? 
+    //examples return 403 (Forbidden) || return status_code Uri
     //..........
 }
 
-void handleErrorPageDirective(const string& line, std::ifstream&, int&)//arg num -?
+void handleErrorPageDirective(const string& line, std::ifstream&, int&)//arg num =?
 {
     cout << "Handling 'error_page': " << line << endl;
-    //................
+
+    //error_page code uri
+    //error_page code1 code2 code3 same_uri
+
 }
 
 /////////////////////////////////////////////////////////////////////
