@@ -28,8 +28,10 @@ void handleAllowMethods(const string& line)
 void handleReturn(const string& line)  //arg count - ? 
 {
     cout << "Handling 'return': " << line << endl;
-    //TODO: check first arg numeric and matches error code, ex: 404 ... 
-    //second arg check???/ path check??
+    //TODO: check first arg numeric and is http response code, ex: 404 ... 
+    //return 301 http://example.com ??
+    //return 301??
+    //return 404 'Not found' ??
     // ...
 }
 
@@ -214,9 +216,12 @@ void handleReturnDirective(const string& line, std::ifstream&, int&) //arg num =
 void handleErrorPageDirective(const string& line, std::ifstream&, int&)//arg num =?
 {
     cout << "Handling 'error_page': " << line << endl;
-    // at least 1 arg
+    // at least 2 arg, more???
     //error_page code uri
-    //error_page code1 code2 code3 same_uri
+    //error_page code1 code2 code3 same_uri???
+    //error_page 404 /404.html;
+    //error_page 500 502 503 /50x.html; ????
+    //......
 }
 
 /////////////////////////////////////////////////////////////////////
