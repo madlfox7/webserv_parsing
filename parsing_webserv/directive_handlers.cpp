@@ -1,5 +1,7 @@
 #include "Parser.hpp"
 
+
+//TODO:check count of directives 
 ///location_handlers
 
 //////ALLOW METHODS/////////////////////
@@ -62,7 +64,7 @@ void handleIndex(const string& line)
         throw std::runtime_error("⚠ Error: Invalid number of arguments for 'index' directive");
    const char* extensions[] = {".php", ".html"}; // index.php || index.html // index.php.hp case -> normal name = ????
     check_extension(words[1], extensions, 2);
-    // arg num - ? index index.php index.html index.php is ok????
+    // arg num - ? "index index.php index.html index.php" ok????
     return ;
 }
 
@@ -112,8 +114,8 @@ void handleLocation(std::ifstream& file, const string& locationArg, int& serverB
         std::map<string, void(*)(const string&)>::iterator it = locationDirectiveHandlers.find(directive);
         if (it != locationDirectiveHandlers.end()) 
             it->second(innerLine);
-        else 
-            cout << "Generic handling for directive '" << directive << "' in 'location' block." << endl;
+        //else 
+          //  cout << "Generic handling for directive '" << directive << "' in 'location' block." << endl;
     }
     throw std::runtime_error("⚠ Error: Expected '}' to close 'location' block.");
 }
@@ -129,7 +131,7 @@ bool isValidPort(const string& port)
             return false;
     }
     int portNum = std::atoi(port.c_str());
-    return portNum > 0 && portNum <= 65535;
+    return portNum > 0 && portNum <= 65535; ///???
 }
 
 bool isValidIP(const string& ip)
@@ -190,9 +192,10 @@ void handleServerNameDirective(const string& line, std::ifstream&, int&) //num  
      if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Invalid 'server_name' directive format. Expect exactly one argument.");
     //.........
-    //check .com .org in server name || localhost ? 
+    //check .com .org extensions ... 
+    // server name.com  localhost ? ??
     //server name defined by ip?? server_name 127.0.0.1;
-    //can have many args???? 
+    //can have many args or 1?
 }
 
 
@@ -214,7 +217,6 @@ void handleErrorPageDirective(const string& line, std::ifstream&, int&)//arg num
     // at least 1 arg
     //error_page code uri
     //error_page code1 code2 code3 same_uri
-
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -233,7 +235,6 @@ void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&)
     //later change isValidPort into a generic function with two limits, that will check num is valid >0 < INT_MAX || in specified range...
     //...............
 }
-
 
 
 void handleLocationDirective(const string& line, std::ifstream& file, int& serverBlockDepth) 
