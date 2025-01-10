@@ -184,12 +184,12 @@ void handleListenDirective(const string& line, std::ifstream&, int&)
     {
         string ip = arg.substr(0, colonPos);
         string port = arg.substr(colonPos + 1);
-        if (!isValidIP(ip) || !isValidNumber(arg, 0,  65535))
+        if (!isValidIP(ip) || !isValidNumber(port, 0,  65535))
             throw std::runtime_error("⚠ Error: Invalid IP address or port number.");
     } 
     else
     {
-          if (!isValidNumber(arg, 0,  65535))
+          if (!isValidNumber(arg))
             throw std::runtime_error("⚠ Error: Invalid port number or address.");
     }
 }
