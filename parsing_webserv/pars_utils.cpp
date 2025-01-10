@@ -1,6 +1,18 @@
 #include "Parser.hpp"
 
 
+bool isValidNumber(const string& str, int min, int max) 
+{
+    if (str.empty())
+        return false;
+    for (size_t i = 0; i < str.size(); i++) 
+    {
+        if (!std::isdigit(str[i]))
+            return false;
+    }
+    long num = std::atol(str.c_str());
+    return num >= min && num <= max;
+}
 
 void check_extension(const std::string& word, const char* extensions[], int num_extensions)
 {

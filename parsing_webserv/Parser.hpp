@@ -46,7 +46,7 @@ string get_filename(int argc, char **argv);
 // string remove_comments(const string &content);
 
 //pars_utils.cpp
-
+bool isValidNumber(const string& str, int min = 0, int max = INT_MAX) ;
 void normalizeFileContent(const string& filename) ;
 bool isAllowedDirective(const string& directive, const string* allowedDirectives, size_t directiveCount) ;
 void checkLineFormat(const string& line, const string& expectedString) ;

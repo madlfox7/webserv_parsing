@@ -135,16 +135,16 @@ void handleLocation(std::ifstream& file, const string& locationArg, int& serverB
 //////server_handlers
 ///handling listen ///////////////////////////////////////////////////////////////
 
-bool isValidPort(const string& port) 
-{
-    for (size_t i = 0; i < port.size(); ++i) 
-    {
-        if (!std::isdigit(port[i])) 
-            return false;
-    }
-    int portNum = std::atoi(port.c_str());
-    return portNum > 0 && portNum <= 65535; ///???
-}
+// bool isValidPort(const string& port) 
+// {
+//     for (size_t i = 0; i < port.size(); ++i) 
+//     {
+//         if (!std::isdigit(port[i])) 
+//             return false;
+//     }
+//     int portNum = std::atoi(port.c_str());
+//     return portNum > 0 && portNum <= 65535; 
+// }
 
 bool isValidIP(const string& ip)
  {
@@ -170,7 +170,7 @@ bool isValidIP(const string& ip)
     return byteCount == 4; 
 }
 
-
+//bool isValidNumber(const string& str, int min, int max) 
 void handleListenDirective(const string& line, std::ifstream&, int&) 
 {    
     //in class we must have variable and function to check listen_count < 0 || > (max_listen_size?) throw err
@@ -184,12 +184,12 @@ void handleListenDirective(const string& line, std::ifstream&, int&)
     {
         string ip = arg.substr(0, colonPos);
         string port = arg.substr(colonPos + 1);
-        if (!isValidIP(ip) || !isValidPort(port)) 
+        if (!isValidIP(ip) || !isValidNumber(arg, 0,  65535))
             throw std::runtime_error("⚠ Error: Invalid IP address or port number.");
     } 
     else
     {
-          if (!isValidPort(arg))
+          if (!isValidNumber(arg, 0,  65535))
             throw std::runtime_error("⚠ Error: Invalid port number or address.");
     }
 }
@@ -240,14 +240,8 @@ void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&)
     std::vector<string> words = splitLine(line);
     if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Invalid 'client_max_body_size' directive format. Expect exactly one argument.");
-    // for (size_t i = 0; i < words[1].size(); ++i)
-    // {
-    //     int num = std::atoi(words[1].c_str());
-    //     if (!isdigit(words[1]) || (num > 0 && num <= INT_MAX))
-    //         throw std::runtime_error("⚠ Error: 'clinet_max_body_size' argument must be a valid number");
-    // }
-    //later change isValidPort into a generic function with two limits, that will check num is valid >0 < INT_MAX || in specified range...
-    //...............
+    if (!isValidNumber(words[1]))
+         throw std::runtime_error("⚠ Error: Invalid 'client_max_body_size' argument");
 }
 
 
