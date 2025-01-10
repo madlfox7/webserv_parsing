@@ -57,7 +57,7 @@ void pars_server(const string& filename)
                  {
                     if (--serverBlockDepth == 0) 
                     {
-                        cout << "✅✅✅✅✅✅✅✅Server block closed successfully.✅✅✅✅✅✅✅" << std::endl;
+                        cout << "Server block closed successfully!!!!" << std::endl;
                         break; // server block end
                     }
                     continue; // handle }

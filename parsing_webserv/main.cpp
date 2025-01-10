@@ -31,6 +31,7 @@ int ft_main(int argc, char **argv)
         cerr << "Failed to parse configuration file." << endl;
         return 1; 
     }
+    cout << "✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅"<<endl;
     //////////////////////////////////////////////////////////////////
     try
 	{
