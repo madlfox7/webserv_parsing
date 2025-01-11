@@ -42,6 +42,7 @@ void handleReturn(const string& line)  //arg count - ?
     //return 301 http://example.com ??
     //return 301??
     //return 404 'Not found' ??
+    //2 arg 
     // ...
 }
 
@@ -52,6 +53,8 @@ void handleRoot(const string& line)
     if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Invalid number of arguments for 'root'. Expected exactly one argument.");
    // .. root arg validation ? 
+   //directory check ...
+
 }
 
 
@@ -77,6 +80,8 @@ void handleIndex(const string& line)
    const char* extensions[] = {".php", ".html"}; // index.php || index.html // index.php.hp case -> normal name = ????
     check_extension(words[1], extensions, 2);
     // arg num - ? "index index.php index.html index.php" ok????
+    //only 1 arg
+
     return ;
 }
 
@@ -90,7 +95,8 @@ void handleCgi(const string & line)
     if (words.size() != 3)
         throw std::runtime_error("⚠ Error: Invalid number of arguments for 'cgi_extension'. Expected exactly two arguments.");
     if (words[1] != ".py" && words[1] != ".sh")   /// ".py" or "py"? what about "./py" / symbol???
-        throw std::runtime_error("⚠ Error: Invalid argument for 'autoindex'. Allowed values are 'on' or 'off'.");
+        throw std::runtime_error("⚠ Error: Invalid argument for 'autoindex'. Allowed values are 'on' or 'off'."); ////
+
 }
 
 
@@ -168,7 +174,8 @@ bool isValidIP(const string& ip)
         ++byteCount;
     }
     return byteCount == 4; 
-}
+} //private brodcast ip's 
+
 
 //bool isValidNumber(const string& str, int min, int max) 
 void handleListenDirective(const string& line, std::ifstream&, int&) 
@@ -203,10 +210,12 @@ void handleServerNameDirective(const string& line, std::ifstream&, int&) //num  
      if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Invalid 'server_name' directive format. Expect exactly one argument.");
     //.........
+    //1 arg 
     //check .com .org extensions ... 
     // server name.com  localhost ? ??
     //server name defined by ip?? server_name 127.0.0.1;
     //can have many args or 1?
+    //1 arg 
 }
 
 
