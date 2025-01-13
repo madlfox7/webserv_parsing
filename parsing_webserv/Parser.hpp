@@ -14,6 +14,7 @@
 #include <cstring> 
 #include <sys/stat.h> 
 #include <map>
+#include <set>
 #include <climits>
 #include <sstream> 
 
@@ -46,6 +47,10 @@ string get_filename(int argc, char **argv);
 // string remove_comments(const string &content);
 
 //pars_utils.cpp
+//bool is_allowed_return_code(int return_code, const std::vector<int>& allowed_codes);
+void checkDirectiveCount(const std::map<string, int>& directiveCounts);
+bool valid_code(const string& return_code);
+
 bool isValidNumber(const string& str, int min = 0, int max = INT_MAX) ;
 void normalizeFileContent(const string& filename) ;
 bool isAllowedDirective(const string& directive, const string* allowedDirectives, size_t directiveCount) ;

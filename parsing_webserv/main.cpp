@@ -57,7 +57,7 @@ int ft_main(int argc, char **argv)
 int main(int argc, char **argv)
 {
     ft_main(argc, argv);
-    //system("leaks webserv");
+   // system("leaks webserv");
   
     return (0);
 }

@@ -1,13 +1,6 @@
 #include "Parser.hpp"
 
-//return directive count in 1 server block  = 1 
-//client_max_body_size count = 1
-//others ???
-
-//TODO:check count of directives 
 ///location_handlers
-
-//////ALLOW METHODS/////////////////////
 bool isValidMethod(const string& method) 
 {
     return method == "GET" || method == "POST" || method == "DELETE";
@@ -26,24 +19,14 @@ void handleAllowMethods(const string& line)
     }
 }
 
-//////////////////////////////////////////////////////////////
-
-void handleReturn(const string& line)  //arg count - ? 
+void handleReturn(const string& line)  
 {
     cout << "Handling 'return': " << line << endl;
-      std::vector<string> words = splitLine(line);
-     if (words.size() != 3)
-        throw std::runtime_error("⚠ Error: Invalid 'error_page' directive format. Expect two arguments.");
-
-    // two or one arg is ok? 
-    //examples return 403 (Forbidden) || return status_code Uri
-    //..........
-    //TODO: check first arg numeric and is http response code, ex: 404 ... 
-    //return 301 http://example.com ??
-    //return 301??
-    //return 404 'Not found' ??
-    //2 arg 
-    // ...
+    std::vector<string> words = splitLine(line);
+    if (words.size() != 3)
+        throw std::runtime_error("⚠ Error: Invalid 'return' directive format. Expect two arguments.");
+    if (!valid_code(words[1]))
+        throw std::runtime_error("⚠ Error: Invalid 'return' http status code");
 }
 
 void handleRoot(const string& line)
@@ -52,13 +35,9 @@ void handleRoot(const string& line)
     std::vector<string> words = splitLine(line);
     if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Invalid number of arguments for 'root'. Expected exactly one argument.");
-   // .. root arg validation ? 
-   //directory check ...
-
+   //arg validation check dir?
 }
 
-
-////////AUTOINDEX/////////////////////////////////////////
 void handleAutoindex(const string& line) 
 {
     cout << "Handling 'autoindex': " << line << endl;
@@ -68,37 +47,27 @@ void handleAutoindex(const string& line)
     if (words[1] != "on" && words[1] != "off")  
         throw std::runtime_error("⚠ Error: Invalid argument for 'autoindex'. Allowed values are 'on' or 'off'.");
 }
-///////////////////////////////////////////////////////
-
 
 void handleIndex(const string& line) 
 {
     cout << "Handling 'index': " << line << endl;
     std::vector<string> words = splitLine(line);
-    if (words.size() < 2)
+    if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Invalid number of arguments for 'index' directive");
-   const char* extensions[] = {".php", ".html"}; // index.php || index.html // index.php.hp case -> normal name = ????
+    const char* extensions[] = {".php", ".html"}; 
     check_extension(words[1], extensions, 2);
-    // arg num - ? "index index.php index.html index.php" ok????
-    //only 1 arg
-
     return ;
 }
 
-
-//////////////////////////////////////////////////////////////
-
 void handleCgi(const string & line)
 {
-     cout << "Handling 'cgi': " << line << endl;
+    cout << "Handling 'cgi': " << line << endl;
     std::vector<string> words = splitLine(line);
     if (words.size() != 3)
         throw std::runtime_error("⚠ Error: Invalid number of arguments for 'cgi_extension'. Expected exactly two arguments.");
-    if (words[1] != ".py" && words[1] != ".sh")   /// ".py" or "py"? what about "./py" / symbol???
+    if (words[1] != ".py" && words[1] != ".sh")   ///  what about "./py"???
         throw std::runtime_error("⚠ Error: Invalid argument for 'autoindex'. Allowed values are 'on' or 'off'."); ////
-
 }
-
 
 void handleLocation(std::ifstream& file, const string& locationArg, int& serverBlockDepth) 
 {
@@ -107,6 +76,10 @@ void handleLocation(std::ifstream& file, const string& locationArg, int& serverB
     {
         "allow_methods", "return", "root", "autoindex", "index", "cgi_extension"
     };
+    std::map<string, int> directiveCounts;
+    for (size_t i = 0; i < sizeof(locationDirectives) / sizeof(locationDirectives[0]); ++i) 
+        directiveCounts[locationDirectives[i]] = 0;
+
     std::map<string, void(*)(const string&)> locationDirectiveHandlers;
     locationDirectiveHandlers["allow_methods"] = &handleAllowMethods;
     locationDirectiveHandlers["return"] = &handleReturn;
@@ -120,6 +93,7 @@ void handleLocation(std::ifstream& file, const string& locationArg, int& serverB
         if (innerLine == "}") 
         {
             --serverBlockDepth;
+             checkDirectiveCount(directiveCounts);
             cout << "End of 'location' block." << endl;
             return;
         }
@@ -129,33 +103,22 @@ void handleLocation(std::ifstream& file, const string& locationArg, int& serverB
         const string& directive = words[0];
         if (!isAllowedDirective(directive, locationDirectives, sizeof(locationDirectives) / sizeof(locationDirectives[0]))) 
             throw std::runtime_error("⚠ Error: Unknown directive in 'location': " + directive);
+        std::map<string, int>::iterator countIt = directiveCounts.find(directive);
+        if (countIt != directiveCounts.end()) 
+            countIt->second++;
         std::map<string, void(*)(const string&)>::iterator it = locationDirectiveHandlers.find(directive);
         if (it != locationDirectiveHandlers.end()) 
-            it->second(innerLine);
-        //else 
-          //  cout << "Generic handling for directive '" << directive << "' in 'location' block." << endl;
+            it->second(innerLine); 
     }
     throw std::runtime_error("⚠ Error: Expected '}' to close 'location' block.");
 }
 
 //////server_handlers
-///handling listen ///////////////////////////////////////////////////////////////
-
-// bool isValidPort(const string& port) 
-// {
-//     for (size_t i = 0; i < port.size(); ++i) 
-//     {
-//         if (!std::isdigit(port[i])) 
-//             return false;
-//     }
-//     int portNum = std::atoi(port.c_str());
-//     return portNum > 0 && portNum <= 65535; 
-// }
 
 bool isValidIP(const string& ip)
  {
-     if (ip == "localhost")  //127.0.0.1:3434 <=> localhost:3434, listen localhost (port 80 by default).. 
-        return true;   // syntax listen ip:port
+     if (ip == "localhost")  
+        return true;   
     std::istringstream iss(ip);
     string byte;
     int byteCount = 0;
@@ -174,13 +137,10 @@ bool isValidIP(const string& ip)
         ++byteCount;
     }
     return byteCount == 4; 
-} //private brodcast ip's 
+} //private brodcast ip's //TODO
 
-
-//bool isValidNumber(const string& str, int min, int max) 
 void handleListenDirective(const string& line, std::ifstream&, int&) 
 {    
-    //in class we must have variable and function to check listen_count < 0 || > (max_listen_size?) throw err
     cout << "Handling 'listen': " << line << endl;
     std::vector<string> words = splitLine(line);
      if (words.size() != 2)
@@ -201,48 +161,26 @@ void handleListenDirective(const string& line, std::ifstream&, int&)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
-void handleServerNameDirective(const string& line, std::ifstream&, int&) //num  1 < args < ? server_name google.com google.org ... ok???
+void handleServerNameDirective(const string& line, std::ifstream&, int&) 
 {
-       cout << "Handling 'server_name': " << line << endl;
-        std::vector<string> words = splitLine(line);
+    cout << "Handling 'server_name': " << line << endl;
+    std::vector<string> words = splitLine(line);
      if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Invalid 'server_name' directive format. Expect exactly one argument.");
-    //.........
-    //1 arg 
-    //check .com .org extensions ... 
-    // server name.com  localhost ? ??
-    //server name defined by ip?? server_name 127.0.0.1;
-    //can have many args or 1?
-    //1 arg 
 }
 
-
-// void handleReturnDirective(const string& line, std::ifstream&, int&) //arg num = ?
-// {
-//     cout << "Handling 'return': " << line << endl;
-//      std::vector<string> words = splitLine(line);
-//      if (words.size() != 3)
-//         throw std::runtime_error("⚠ Error: Invalid 'error_page' directive format. Expect two arguments.");
-
-//     // two or one arg is ok? 
-//     //examples return 403 (Forbidden) || return status_code Uri
-//     //..........
-// }
-
-void handleErrorPageDirective(const string& line, std::ifstream&, int&)//arg num =?
+void handleErrorPageDirective(const string& line, std::ifstream&, int&)
 {
     cout << "Handling 'error_page': " << line << endl;
-    // at least 2 arg, more???
-    //error_page code uri
-    //error_page code1 code2 code3 same_uri???
-    //error_page 404 /404.html;
-    //error_page 500 502 503 /50x.html; ????
-    //......
+    std::vector<string> words = splitLine(line);
+    if (words.size() != 3)
+        throw std::runtime_error("⚠ Error: Invalid 'error_page' directive format. Expect two arguments.");
+   //  std::vector<std::string> strList = {"404", "508", "200"}; 
+   // if (!valid_code(return_code, strList))
+    if (!valid_code(words[1]))
+        throw std::runtime_error("⚠ Error: Invalid 'error_page' http status code");
 }
 
-/////////////////////////////////////////////////////////////////////
 void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&)
 {
     cout << "Handling 'client_max_body_size': " << line << endl;
@@ -252,7 +190,6 @@ void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&)
     if (!isValidNumber(words[1]))
          throw std::runtime_error("⚠ Error: Invalid 'client_max_body_size' argument");
 }
-
 
 void handleLocationDirective(const string& line, std::ifstream& file, int& serverBlockDepth) 
 {

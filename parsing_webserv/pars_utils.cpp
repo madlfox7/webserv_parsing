@@ -1,5 +1,29 @@
 #include "Parser.hpp"
 
+bool valid_code(const string& return_code)
+{
+    return  (isValidNumber(return_code, 100, 599));//change range or hardcode vals???
+}
+
+// bool valid_code(const string& return_code, const std::vector<std::string>& strList)
+//  {
+//     for (size_t i = 0; i < strList.size(); ++i)
+//     {
+//         if (return_code == strList[i]) 
+//             return true;
+//     }
+//     return false;
+// } //exact match case
+
+void checkDirectiveCount(const std::map<string, int>& directiveCounts)
+{
+    for (std::map<string, int>::const_iterator it = directiveCounts.begin(); it != directiveCounts.end(); ++it)
+    {
+        cout << "Directive: " << it->first << " Count: " << it->second << endl;
+        if (it->second != 1 && !(it->first == "listen" || it->first == "location")) 
+            throw std::runtime_error("⚠ Error: Directive " + it->first + " should appear exactly once.");
+    }
+}
 
 bool isValidNumber(const string& str, int min, int max) 
 {
@@ -14,7 +38,7 @@ bool isValidNumber(const string& str, int min, int max)
     return num >= min && num <= max;
 }
 
-void check_extension(const std::string& word, const char* extensions[], int num_extensions)
+void check_extension(const string& word, const char* extensions[], int num_extensions)
 {
     for (int i = 0; i < num_extensions; ++i)
     {
@@ -24,8 +48,6 @@ void check_extension(const std::string& word, const char* extensions[], int num_
     }
     throw std::runtime_error("⚠ Error: expected one of the extensions.");
 }
-
-
 
 void checkLineFormat(const string& line, const string& expectedString) 
 {
@@ -52,7 +74,6 @@ std::vector<string> splitLine(const string& line)
         words.push_back(word);
     return words;
 }
-
 
 void normalizeFileContent(const string& filename) 
 {
