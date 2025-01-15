@@ -5,7 +5,7 @@ bool valid_code(const string& return_code)
     return  (isValidNumber(return_code, 100, 599));//change range or hardcode vals???
 }
 
-// bool valid_code(const string& return_code, const std::vector<std::string>& strList)
+// bool valid_code(const string& return_code, const std::vector<string>& strList)
 //  {
 //     for (size_t i = 0; i < strList.size(); ++i)
 //     {
@@ -75,12 +75,13 @@ std::vector<string> splitLine(const string& line)
     return words;
 }
 
-void normalizeFileContent(const string& filename) 
+
+void normalizeFileContent(const string &filename) 
 {
     std::ifstream file(filename.c_str());
-    if (!file)
+    if (!file) 
     {
-        cout << "Failed to open file: " << filename << std::endl;
+        std::cout << "Failed to open file: " << filename << std::endl;
         return;
     }
     string line;
@@ -88,6 +89,9 @@ void normalizeFileContent(const string& filename)
     bool firstLine = true;
     while (std::getline(file, line)) 
     {
+        string::size_type hashPos = line.find('#');
+        if (hashPos != string::npos) 
+            line.erase(hashPos);
         string normalizedLine;
         bool inWord = false;
         for (size_t i = 0; i < line.length(); ++i) 
@@ -97,7 +101,7 @@ void normalizeFileContent(const string& filename)
                 if (inWord) 
                 {
                     normalizedLine += ' ';
-                    inWord = false;  
+                    inWord = false;
                 }
             } 
             else 
@@ -108,7 +112,7 @@ void normalizeFileContent(const string& filename)
         }
         if (!normalizedLine.empty() && normalizedLine[normalizedLine.length() - 1] == ' ') 
             normalizedLine.erase(normalizedLine.length() - 1);
-        if (!normalizedLine.empty())
+        if (!normalizedLine.empty()) 
         {
             if (!firstLine) 
                 buffer << '\n';
@@ -119,11 +123,65 @@ void normalizeFileContent(const string& filename)
     }
     file.close();
     std::ofstream outFile(filename.c_str());
-    if (!outFile)
+    if (!outFile) 
     {
-        cout << "Failed to open file for writing: " << filename << std::endl;
+        std::cout << "Failed to open file for writing: " << filename << std::endl;
         return;
     }
     outFile << buffer.str();
     outFile.close();
 }
+
+
+// void normalizeFileContent(const string& filename) 
+// {
+//     std::ifstream file(filename.c_str());
+//     if (!file)
+//     {
+//         cout << "Failed to open file: " << filename << std::endl;
+//         return;
+//     }
+//     string line;
+//     std::ostringstream buffer;
+//     bool firstLine = true;
+//     while (std::getline(file, line)) 
+//     {
+//         string normalizedLine;
+//         bool inWord = false;
+//         for (size_t i = 0; i < line.length(); ++i) 
+//         {
+//             if (isspace(line[i])) 
+//             {
+//                 if (inWord) 
+//                 {
+//                     normalizedLine += ' ';
+//                     inWord = false;  
+//                 }
+//             } 
+//             else 
+//             {
+//                 normalizedLine += line[i];
+//                 inWord = true;
+//             }
+//         }
+//         if (!normalizedLine.empty() && normalizedLine[normalizedLine.length() - 1] == ' ') 
+//             normalizedLine.erase(normalizedLine.length() - 1);
+//         if (!normalizedLine.empty())
+//         {
+//             if (!firstLine) 
+//                 buffer << '\n';
+//             else 
+//                 firstLine = false;
+//             buffer << normalizedLine;
+//         }
+//     }
+//     file.close();
+//     std::ofstream outFile(filename.c_str());
+//     if (!outFile)
+//     {
+//         cout << "Failed to open file for writing: " << filename << std::endl;
+//         return;
+//     }
+//     outFile << buffer.str();
+//     outFile.close();
+// } // old normalize, without comment remover
