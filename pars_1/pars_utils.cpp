@@ -24,7 +24,6 @@ void checkDirectiveCount(const std::map<string, int>& directiveCounts, const str
     const string notNecessaryDirectives_ServerBlock[] = {"server_name", "error_page", "client_max_body_size"};
     const string notNecessaryDirectives_LocationBlock[] = {
         "allow_methods", "return", "autoindex", "upload_dir", "index", "cgi_extension"};
-
     const string* necessaryDirectives = NULL;
     const string* notNecessaryDirectives = NULL;
     size_t necessaryCount = 0, notNecessaryCount = 0;
@@ -43,32 +42,25 @@ void checkDirectiveCount(const std::map<string, int>& directiveCounts, const str
         necessaryCount = sizeof(necessaryDirectives_LocationBlock) / sizeof(string);
         notNecessaryCount = sizeof(notNecessaryDirectives_LocationBlock) / sizeof(string);
     }
-    else
-    {
-        throw std::runtime_error("⚠ Error: Unknown block type: " + blockType);
-    }
+    // else
+    // {
+    //     throw std::runtime_error("⚠ Error: Unknown block type: " + blockType);
+    // }
     for (size_t i = 0; i < necessaryCount; ++i)
     {
         const string& directive = necessaryDirectives[i];
         std::map<string, int>::const_iterator it = directiveCounts.find(directive);
-
         if (directive == "listen")
         {
             if (it == directiveCounts.end() || it->second < 1)
-            {
                 throw std::runtime_error("⚠ Error: Necessary directive 'listen' is missing in " + blockType + ".");
-            }
         }
         else
         {
             if (it == directiveCounts.end())
-            {
                 throw std::runtime_error("⚠ Error: Necessary directive " + directive + " is missing in " + blockType + ".");
-            }
             else if (it->second > 1)
-            {
                 throw std::runtime_error("⚠ Error: Necessary directive " + directive + " appears more than once in " + blockType + ".");
-            }
         }
     }
 
@@ -78,9 +70,7 @@ void checkDirectiveCount(const std::map<string, int>& directiveCounts, const str
         std::map<string, int>::const_iterator it = directiveCounts.find(directive);
 
         if (it != directiveCounts.end() && it->second > 1)
-        {
             throw std::runtime_error("⚠ Error: Optional directive " + directive + " appears more than once in " + blockType + ".");
-        }
     }
     for (std::map<string, int>::const_iterator it = directiveCounts.begin(); it != directiveCounts.end(); ++it)
     {

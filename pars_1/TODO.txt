@@ -22,3 +22,5 @@ LocationBlock
         index
         cgi_extension
 }
+
+
