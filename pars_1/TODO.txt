@@ -1,0 +1,24 @@
+ServerBlock
+{
+    necessary:
+        listen
+        location
+    not necessary:
+        server_name
+        error_page
+        client_max_body_size
+}
+
+LocationBlock
+{
+    necessary:
+        path
+        root
+    not necessary:
+        allow_methods
+        return
+        autoindex
+        upload_dir
+        index
+        cgi_extension
+}

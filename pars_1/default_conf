@@ -1,0 +1,17 @@
+user nobody;
+events {
+}
+http {
+server {
+location /one {
+}
+location /two {
+}
+}
+server {
+}
+}
+stream {
+server {
+}
+}
