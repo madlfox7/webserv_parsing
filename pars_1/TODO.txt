@@ -24,3 +24,6 @@ LocationBlock
 }
 
 
+// ip ranges validation (private, etc)
+// status error_codes validation 
+//multiple listen ports in different server blocks with no server_name or same server_name validation
