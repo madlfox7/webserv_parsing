@@ -5,7 +5,7 @@ bool valid_code(const string& return_code)
     return  (isValidNumber(return_code, 100, 599));//change range or hardcode vals???
 }
 
-// bool valid_code(const string& return_code, const std::vector<string>& strList)
+// bool valid_code(const string& return_code, const std::vector<string>& strList) 
 //  {
 //     for (size_t i = 0; i < strList.size(); ++i)
 //     {
@@ -16,77 +16,106 @@ bool valid_code(const string& return_code)
 // } //exact match case
 
 
+// void checkDirectiveCount(const std::map<string, int>& directiveCounts, const string& blockType)
+// {
+//     const string necessaryDirectives_ServerBlock[] = {"listen", "location"};
+//     const string necessaryDirectives_LocationBlock[] = {"root"};
+
+//     const string notNecessaryDirectives_ServerBlock[] = {"server_name", "error_page", "client_max_body_size"};
+//     const string notNecessaryDirectives_LocationBlock[] = {
+//         "allow_methods", "return", "autoindex", "upload_dir", "index", "cgi_extension"};
+//     const string* necessaryDirectives = NULL;
+//     const string* notNecessaryDirectives = NULL;
+//     size_t necessaryCount = 0, notNecessaryCount = 0;
+
+//     if (blockType == "ServerBlock")
+//     {
+//         necessaryDirectives = necessaryDirectives_ServerBlock;
+//         notNecessaryDirectives = notNecessaryDirectives_ServerBlock;
+//         necessaryCount = sizeof(necessaryDirectives_ServerBlock) / sizeof(string);
+//         notNecessaryCount = sizeof(notNecessaryDirectives_ServerBlock) / sizeof(string);
+//     }
+//     else if (blockType == "LocationBlock")
+//     {
+//         necessaryDirectives = necessaryDirectives_LocationBlock;
+//         notNecessaryDirectives = notNecessaryDirectives_LocationBlock;
+//         necessaryCount = sizeof(necessaryDirectives_LocationBlock) / sizeof(string);
+//         notNecessaryCount = sizeof(notNecessaryDirectives_LocationBlock) / sizeof(string);
+//     }
+//     for (size_t i = 0; i < necessaryCount; ++i)
+//     {
+//         const string& directive = necessaryDirectives[i];
+//         std::map<string, int>::const_iterator it = directiveCounts.find(directive);
+//         if (directive == "listen")
+//         {
+//             if (it == directiveCounts.end() || it->second < 1)
+//                 throw std::runtime_error("⚠ Error: Necessary directive 'listen' is missing in " + blockType + ".");
+//         }
+//         else
+//         {
+//             if (it == directiveCounts.end())
+//                 throw std::runtime_error("⚠ Error: Necessary directive " + directive + " is missing in " + blockType + ".");
+//             else if (it->second > 1)
+//                 throw std::runtime_error("⚠ Error: Necessary directive " + directive + " appears more than once in " + blockType + ".");
+//         }
+//     }
+//     for (size_t i = 0; i < notNecessaryCount; ++i)
+//     {
+//         const string& directive = notNecessaryDirectives[i];
+//         std::map<string, int>::const_iterator it = directiveCounts.find(directive);
+
+//         if (it != directiveCounts.end() && it->second > 1)
+//             throw std::runtime_error("⚠ Error: Optional directive " + directive + " appears more than once in " + blockType + ".");
+//     }
+//     for (std::map<string, int>::const_iterator it = directiveCounts.begin(); it != directiveCounts.end(); ++it)
+//         cout << "Directive: " << it->first << " Count: " << it->second << endl;
+// }  //old 
+
+
 void checkDirectiveCount(const std::map<string, int>& directiveCounts, const string& blockType)
 {
     const string necessaryDirectives_ServerBlock[] = {"listen", "location"};
     const string necessaryDirectives_LocationBlock[] = {"root"};
 
-    const string notNecessaryDirectives_ServerBlock[] = {"server_name", "error_page", "client_max_body_size"};
-    const string notNecessaryDirectives_LocationBlock[] = {
+    const string optionalDirectives_ServerBlock[] = {"server_name", "error_page", "client_max_body_size"};
+    const string optionalDirectives_LocationBlock[] = {
         "allow_methods", "return", "autoindex", "upload_dir", "index", "cgi_extension"};
+
     const string* necessaryDirectives = NULL;
-    const string* notNecessaryDirectives = NULL;
-    size_t necessaryCount = 0, notNecessaryCount = 0;
+    const string* optionalDirectives = NULL;
+    size_t necessaryCount = 0, optionalCount = 0;
 
     if (blockType == "ServerBlock")
     {
         necessaryDirectives = necessaryDirectives_ServerBlock;
-        notNecessaryDirectives = notNecessaryDirectives_ServerBlock;
+        optionalDirectives = optionalDirectives_ServerBlock;
         necessaryCount = sizeof(necessaryDirectives_ServerBlock) / sizeof(string);
-        notNecessaryCount = sizeof(notNecessaryDirectives_ServerBlock) / sizeof(string);
+        optionalCount = sizeof(optionalDirectives_ServerBlock) / sizeof(string);
     }
     else if (blockType == "LocationBlock")
     {
         necessaryDirectives = necessaryDirectives_LocationBlock;
-        notNecessaryDirectives = notNecessaryDirectives_LocationBlock;
+        optionalDirectives = optionalDirectives_LocationBlock;
         necessaryCount = sizeof(necessaryDirectives_LocationBlock) / sizeof(string);
-        notNecessaryCount = sizeof(notNecessaryDirectives_LocationBlock) / sizeof(string);
+        optionalCount = sizeof(optionalDirectives_LocationBlock) / sizeof(string);
     }
-    // else
-    // {
-    //     throw std::runtime_error("⚠ Error: Unknown block type: " + blockType);
-    // }
     for (size_t i = 0; i < necessaryCount; ++i)
     {
         const string& directive = necessaryDirectives[i];
         std::map<string, int>::const_iterator it = directiveCounts.find(directive);
-        if (directive == "listen")
-        {
-            if (it == directiveCounts.end() || it->second < 1)
-                throw std::runtime_error("⚠ Error: Necessary directive 'listen' is missing in " + blockType + ".");
-        }
-        else
-        {
-            if (it == directiveCounts.end())
-                throw std::runtime_error("⚠ Error: Necessary directive " + directive + " is missing in " + blockType + ".");
-            else if (it->second > 1)
-                throw std::runtime_error("⚠ Error: Necessary directive " + directive + " appears more than once in " + blockType + ".");
-        }
+        if (it == directiveCounts.end() || it->second < 1)
+            throw std::runtime_error("⚠ Error: Necessary directive '" + directive + "' is missing in " + blockType + ".");
     }
-
-    for (size_t i = 0; i < notNecessaryCount; ++i)
+    for (size_t i = 0; i < optionalCount; ++i)
     {
-        const string& directive = notNecessaryDirectives[i];
+        const string& directive = optionalDirectives[i];
         std::map<string, int>::const_iterator it = directiveCounts.find(directive);
-
         if (it != directiveCounts.end() && it->second > 1)
-            throw std::runtime_error("⚠ Error: Optional directive " + directive + " appears more than once in " + blockType + ".");
+            throw std::runtime_error("⚠ Error: Optional directive '" + directive + "' appears more than once in " + blockType + ".");
     }
-    for (std::map<string, int>::const_iterator it = directiveCounts.begin(); it != directiveCounts.end(); ++it)
-    {
+    for (std::map<string, int>::const_iterator it = directiveCounts.begin(); it != directiveCounts.end(); ++it) //DEBUG
         cout << "Directive: " << it->first << " Count: " << it->second << endl;
-    }
 }
-
-// void checkDirectiveCount(const std::map<string, int>& directiveCounts)
-// {
-//     for (std::map<string, int>::const_iterator it = directiveCounts.begin(); it != directiveCounts.end(); ++it)
-//     {
-//         cout << "Directive: " << it->first << " Count: " << it->second << endl;
-//         if (it->second != 1 && !(it->first == "listen" || it->first == "location")) 
-//             throw std::runtime_error("⚠ Error: Directive " + it->first + " should appear exactly once.");
-//     }
-// }
 
 bool isValidNumber(const string& str, int min, int max) 
 {
@@ -137,7 +166,6 @@ std::vector<string> splitLine(const string& line)
         words.push_back(word);
     return words;
 }
-
 
 void normalizeFileContent(const string &filename) 
 {
@@ -194,57 +222,3 @@ void normalizeFileContent(const string &filename)
     outFile << buffer.str();
     outFile.close();
 }
-
-
-// void normalizeFileContent(const string& filename) 
-// {
-//     std::ifstream file(filename.c_str());
-//     if (!file)
-//     {
-//         cout << "Failed to open file: " << filename << std::endl;
-//         return;
-//     }
-//     string line;
-//     std::ostringstream buffer;
-//     bool firstLine = true;
-//     while (std::getline(file, line)) 
-//     {
-//         string normalizedLine;
-//         bool inWord = false;
-//         for (size_t i = 0; i < line.length(); ++i) 
-//         {
-//             if (isspace(line[i])) 
-//             {
-//                 if (inWord) 
-//                 {
-//                     normalizedLine += ' ';
-//                     inWord = false;  
-//                 }
-//             } 
-//             else 
-//             {
-//                 normalizedLine += line[i];
-//                 inWord = true;
-//             }
-//         }
-//         if (!normalizedLine.empty() && normalizedLine[normalizedLine.length() - 1] == ' ') 
-//             normalizedLine.erase(normalizedLine.length() - 1);
-//         if (!normalizedLine.empty())
-//         {
-//             if (!firstLine) 
-//                 buffer << '\n';
-//             else 
-//                 firstLine = false;
-//             buffer << normalizedLine;
-//         }
-//     }
-//     file.close();
-//     std::ofstream outFile(filename.c_str());
-//     if (!outFile)
-//     {
-//         cout << "Failed to open file for writing: " << filename << std::endl;
-//         return;
-//     }
-//     outFile << buffer.str();
-//     outFile.close();
-// } // old normalize, without comment remover

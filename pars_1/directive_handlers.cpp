@@ -79,7 +79,6 @@ void handleLocation(std::ifstream& file, const string& locationArg, int& serverB
     std::map<string, int> directiveCounts;
     for (size_t i = 0; i < sizeof(locationDirectives) / sizeof(locationDirectives[0]); ++i) 
         directiveCounts[locationDirectives[i]] = 0;
-
     std::map<string, void(*)(const string&)> locationDirectiveHandlers;
     locationDirectiveHandlers["allow_methods"] = &handleAllowMethods;
     locationDirectiveHandlers["return"] = &handleReturn;
@@ -194,8 +193,9 @@ void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&)
 void handleLocationDirective(const string& line, std::ifstream& file, int& serverBlockDepth) 
 {
     std::vector<string> words = splitLine(line);
-    if (words.size() < 2)
+    if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Directive 'location' must have an argument.");
+    //TODO: check location path???
     string nextLine;
     if (!std::getline(file, nextLine) || nextLine != "{")
         throw std::runtime_error("⚠ Error: Expected '{' after 'location' directive.");
