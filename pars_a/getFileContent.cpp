@@ -79,23 +79,23 @@ void validateServerBlocks()
                 }
                 if (serverNames1.empty() && serverNames2.empty())
                 {
-                    std::cerr << "\033[31mError: Server Block " << id1 << " and Server Block " << id2
+                    cerr << "\033[31mError: Server Block " << id1 << " and Server Block " << id2
                               << " have the same listen port(s): ";
                     for (size_t i = 0; i < commonListenPorts.size(); ++i)
-                        std::cerr << commonListenPorts[i] << " ";
-                    std::cerr << "but neither has a server_name.\033[0m" << std::endl;
+                        cerr << commonListenPorts[i] << " ";
+                    cerr << "but neither has a server_name.\033[0m" << std::endl;
                     throw std::runtime_error("Conflicting server blocks detected.");
                 }
                 if (!commonServerNames.empty() && serverNameSet1 == serverNameSet2)
                 {
-                    std::cerr << "\033[31mError: Server Block " << id1 << " and Server Block " << id2
+                    cerr << "\033[31mError: Server Block " << id1 << " and Server Block " << id2
                               << " have the same listen port(s): ";
                     for (size_t i = 0; i < commonListenPorts.size(); ++i)
-                        std::cerr << commonListenPorts[i] << " ";
-                    std::cerr << "but also have identical server_name(s): ";
+                        cerr << commonListenPorts[i] << " ";
+                    cerr << "but also have identical server_name(s): ";
                     for (size_t i = 0; i < commonServerNames.size(); ++i)
-                        std::cerr << commonServerNames[i] << " ";
-                    std::cerr << "\033[0m" << std::endl;
+                        cerr << commonServerNames[i] << " ";
+                    cerr << "\033[0m" << std::endl;
                     throw std::runtime_error("Conflicting server blocks detected.");
                 }
             }
