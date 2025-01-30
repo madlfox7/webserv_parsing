@@ -4,11 +4,11 @@
 #include <vector>
 #include <iostream>
 #include <exception>
-#include <fcntl.h>
+//#include <fcntl.h>
 #include <unistd.h>
-#include <cctype>
+//#include <cctype>
 #include <string>
-#include <stdexcept>
+//#include <stdexcept>
 #include <fstream>
 #include <cstdlib> 
 #include <cstring> 

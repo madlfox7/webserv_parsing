@@ -111,12 +111,12 @@ std::vector<string> splitLine(const string& line)
     return words;
 }
 
-void normalizeFileContent(const string &filename) 
+void normalizeFileContent(const string &filename)
 {
     std::ifstream file(filename.c_str());
     if (!file) 
     {
-        std::cout << "Failed to open file: " << filename << std::endl;
+        cerr << "Failed to open file: " << filename << endl;
         return;
     }
     string line;
@@ -125,14 +125,14 @@ void normalizeFileContent(const string &filename)
     while (std::getline(file, line)) 
     {
         string::size_type hashPos = line.find('#');
-        if (hashPos != string::npos) 
-            line.erase(hashPos);
+        if (hashPos != string::npos)
+            line.erase(hashPos);  
         string normalizedLine;
         bool inWord = false;
         for (size_t i = 0; i < line.length(); ++i) 
         {
-            if (isspace(line[i])) 
-            {
+            if (isspace(line[i]))
+             {
                 if (inWord) 
                 {
                     normalizedLine += ' ';
@@ -150,19 +150,86 @@ void normalizeFileContent(const string &filename)
         if (!normalizedLine.empty()) 
         {
             if (!firstLine) 
-                buffer << '\n';
+                buffer << '\n';  
             else 
                 firstLine = false;
             buffer << normalizedLine;
         }
     }
     file.close();
-    std::ofstream outFile(filename.c_str());
-    if (!outFile) 
+    string tempFilename = filename + ".tmp";
+    std::ofstream tempFile(tempFilename.c_str());
+    if (!tempFile)
     {
-        std::cout << "Failed to open file for writing: " << filename << std::endl;
+        cerr << "Failed to open temporary file: " << tempFilename << endl;
         return;
     }
-    outFile << buffer.str();
-    outFile.close();
+    tempFile << buffer.str();
+    tempFile.close();
+    if (remove(filename.c_str()) != 0) 
+    {
+        cerr << "Failed to remove original file: " << filename << endl;
+        return;
+    }
+    if (rename(tempFilename.c_str(), filename.c_str()) != 0)
+    {
+        cerr << "Failed to rename temporary file: " << filename << endl;
+        return;
+    }
 }
+
+// void normalizeFileContent(const string &filename) 
+// {
+//     std::ifstream file(filename.c_str());
+//     if (!file) 
+//     {
+//         cout << "Failed to open file: " << filename << endl;
+//         return;
+//     }
+//     string line;
+//     std::ostringstream buffer;
+//     bool firstLine = true;
+//     while (std::getline(file, line)) 
+//     {
+//         string::size_type hashPos = line.find('#');
+//         if (hashPos != string::npos) 
+//             line.erase(hashPos);
+//         string normalizedLine;
+//         bool inWord = false;
+//         for (size_t i = 0; i < line.length(); ++i) 
+//         {
+//             if (isspace(line[i])) 
+//             {
+//                 if (inWord) 
+//                 {
+//                     normalizedLine += ' ';
+//                     inWord = false;
+//                 }
+//             } 
+//             else 
+//             {
+//                 normalizedLine += line[i];
+//                 inWord = true;
+//             }
+//         }
+//         if (!normalizedLine.empty() && normalizedLine[normalizedLine.length() - 1] == ' ') 
+//             normalizedLine.erase(normalizedLine.length() - 1);
+//         if (!normalizedLine.empty()) 
+//         {
+//             if (!firstLine) 
+//                 buffer << '\n';
+//             else 
+//                 firstLine = false;
+//             buffer << normalizedLine;
+//         }
+//     }
+//     file.close();
+//     std::ofstream outFile(filename.c_str());
+//     if (!outFile) 
+//     {
+//         cout << "Failed to open file for writing: " << filename << endl;
+//         return;
+//     }
+//     outFile << buffer.str();
+//     outFile.close();
+// } // old function ovewrite file 
