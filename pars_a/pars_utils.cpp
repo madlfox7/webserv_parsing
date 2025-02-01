@@ -23,7 +23,7 @@ void checkDirectiveCount(const std::map<string, int>& directiveCounts, const str
 
     const string optionalDirectives_ServerBlock[] = {"server_name", "error_page", "client_max_body_size"};
     const string optionalDirectives_LocationBlock[] = {
-        "allow_methods", "return", "autoindex", "upload_dir", "index", "cgi_extension"};
+        "allow_methods", "return", "autoindex", "upload_dir", "index", "cgi_extension", "upload_dir"};
 
     const string* necessaryDirectives = NULL;
     const string* optionalDirectives = NULL;

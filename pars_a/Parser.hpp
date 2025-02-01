@@ -72,5 +72,7 @@ void handleReturn(const string& line) ;
 void handleErrorPageDirective(const string& line, std::ifstream&, int&);
 void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&);
 void handleCgi(const string & line);
+void handleUploadDir(const string & line);
+
 
 #endif

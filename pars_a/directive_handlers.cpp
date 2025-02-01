@@ -69,12 +69,20 @@ void handleCgi(const string & line)
         throw std::runtime_error("⚠ Error: Invalid argument for 'autoindex'. Allowed values are 'on' or 'off'."); ////
 }
 
+void handleUploadDir(const string & line)
+{
+    cout << "Handling 'upload dir': " << line << endl;
+    std::vector<string> words = splitLine(line);
+    if (words.size() != 2)
+        throw std::runtime_error("⚠ Error: Invalid number of arguments for 'upload_dir'. Expected exactly two arguments.");
+}
+
 void handleLocation(std::ifstream& file, const string& locationArg, int& serverBlockDepth) 
 {
     cout << "Handling 'location': " << locationArg << endl;
     const string locationDirectives[] = 
     {
-        "allow_methods", "return", "root", "autoindex", "index", "cgi_extension"
+        "allow_methods", "return", "root", "autoindex", "index", "cgi_extension", "upload_dir"
     };
     std::map<string, int> directiveCounts;
     for (size_t i = 0; i < sizeof(locationDirectives) / sizeof(locationDirectives[0]); ++i) 
@@ -86,6 +94,7 @@ void handleLocation(std::ifstream& file, const string& locationArg, int& serverB
     locationDirectiveHandlers["autoindex"] = &handleAutoindex;
     locationDirectiveHandlers["index"] = &handleIndex;
     locationDirectiveHandlers["cgi_extension"] = &handleCgi;
+    locationDirectiveHandlers["upload_dir"] = &handleUploadDir;
     string innerLine;
     while (std::getline(file, innerLine)) 
     {
