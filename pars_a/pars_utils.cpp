@@ -1,19 +1,75 @@
 #include "Parser.hpp"
 
-bool valid_code(const string& return_code)
-{
-    return  (isValidNumber(return_code, 100, 599));//change range or hardcode vals???
-}
+// bool valid_code(const string& return_code)
+// {
+//     return  (isValidNumber(return_code, 100, 599));//change range or hardcode vals???
+// // }
+// void resetCounter()
+// {
+//     int dummy = 1;
+//     uniqueError(dummy, 1);   
+// }
 
-// bool valid_code(const string& return_code, const std::vector<string>& strList) 
-//  {
-//     for (size_t i = 0; i < strList.size(); ++i)
-//     {
-//         if (return_code == strList[i]) 
-//             return true;
+
+// void uniqueError(int &isUnique, int reset)
+// {
+//     static std::set<string> seenCodes; 
+//     if (reset == 1)
+//      {
+//         seenCodes.clear(); 
+//         isUnique = 1;
+//         return;
 //     }
-//     return false;
-// } //exact match case
+//     if (isUnique == 0) 
+//         return; 
+// }
+
+// std::set<std::string>& getSeenCodes() {
+//     static std::set<std::string> seenCodes; 
+//     return seenCodes;
+// }
+
+// void uniqueError(int &isUnique, int reset) {
+//     if (reset == 1) {
+//         getSeenCodes().clear(); 
+//         isUnique = 1; 
+//         return;
+//     }
+
+//     if (isUnique == 0) 
+//         return;
+// }
+
+// bool isUniqueError(const std::string &return_code) {
+//     std::set<std::string>& seenCodes = getSeenCodes();
+
+//     if (seenCodes.find(return_code) != seenCodes.end()) {
+//         throw std::runtime_error("Duplicate error status code");
+//     }
+
+//     seenCodes.insert(return_code); 
+//     return true;
+// }
+
+// bool valid_code(const std::string &return_code, const std::string &code) {
+//     return (return_code == code && isUniqueError(return_code));
+// }
+
+
+// bool isUniqueError(const std::string &return_code) {
+//     static std::set<std::string> seenCodes; 
+//     if (seenCodes.find(return_code) != seenCodes.end()) 
+//         throw std::runtime_error("Duplicate error status code"); 
+
+//     seenCodes.insert(return_code); 
+//     return true;
+// }
+
+bool valid_code(const std::string &return_code, const string &code)
+{
+    return (return_code == code);
+    //also check uniqueness of that code 
+}
 
 
 bool checkPrefix(const string &line, const string &prefix)

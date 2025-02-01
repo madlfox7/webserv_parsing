@@ -25,5 +25,6 @@ LocationBlock
 
 
 // ip ranges validation (private, etc)
-// status error_codes validation 
+// status error_codes validation, ADD check  no duplicate error_page status code in same sever block....
+
 //multiple listen ports in different server blocks with no server_name or same server_name validation(DONE)

@@ -180,16 +180,19 @@ void handleServerNameDirective(const string& line, std::ifstream&, int&)
         throw std::runtime_error("⚠ Error: Invalid 'server_name' directive format. Expect exactly one argument.");
 }
 
-void handleErrorPageDirective(const string& line, std::ifstream&, int&)
+
+
+
+void handleErrorPageDirective(const string& line, std::ifstream&, int&) //Pass server block debth 
 {
     cout << "Handling 'error_page': " << line << endl;
     std::vector<string> words = splitLine(line);
     if (words.size() != 3)
         throw std::runtime_error("⚠ Error: Invalid 'error_page' directive format. Expect two arguments.");
-   //  std::vector<std::string> strList = {"404", "508", "200"}; 
-   // if (!valid_code(return_code, strList))
-    if (!valid_code(words[1]))
-        throw std::runtime_error("⚠ Error: Invalid 'error_page' http status code");
+    if (!(valid_code(words[1], "400") || valid_code(words[1], "403") || valid_code(words[1], "404") || valid_code(words[1], "405") || valid_code(words[1], "409") || valid_code(words[1], "411")
+    || valid_code(words[1], "413") || valid_code(words[1], "414") || valid_code(words[1], "500") || valid_code(words[1], "501")))
+         throw std::runtime_error("⚠ Error: Invalid 'error_page' http status code");
+         //ned to pass srever block id 
 }
 
 void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&)

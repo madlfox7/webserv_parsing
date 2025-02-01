@@ -178,7 +178,7 @@ void parseServerBlock(const string& filename, const std::map<string, DirectiveHa
             throw std::runtime_error("⚠ Error: Expected '{' line after 'server'.");
         checkLineFormat(line, "{");
          ++serverBlockId;
-         std::cout << "\n--- Entering Server Block " << serverBlockId << " ---\n";
+         cout << "\n--- Entering Server Block " << serverBlockId << " ---\n";
        // handleServerBlock(file, directiveHandlers);
         handleServerBlock(file, directiveHandlers, serverBlockId);
     }

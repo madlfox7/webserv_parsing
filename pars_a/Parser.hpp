@@ -51,8 +51,9 @@ string get_filename(int argc, char **argv);
 // void checkDirectiveCount(const std::map<string, int>& directiveCounts);
 
 void checkDirectiveCount(const std::map<string, int>& directiveCounts, const string& blockType);
-bool valid_code(const string& return_code);
-
+bool valid_code(const string& return_code, const string &code) ;
+void resetCounter();
+void uniqueError(int &isUnique, int reset);
 bool isValidNumber(const string& str, int min = 0, int max = INT_MAX) ;
 void normalizeFileContent(const string& filename) ;
 bool isAllowedDirective(const string& directive, const string* allowedDirectives, size_t directiveCount) ;
