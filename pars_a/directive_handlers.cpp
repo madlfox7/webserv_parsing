@@ -207,6 +207,8 @@ void handleLocationDirective(const string& line, std::ifstream& file, int& serve
     std::vector<string> words = splitLine(line);
     if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Directive 'location' must have an argument.");
+    if (!checkPrefix(words[1], "/"))
+          throw std::runtime_error("⚠ Error: Location path must start with /");
     //if (words[1] ) if not starting from one slash / error 
 
     //TODO: check location path???

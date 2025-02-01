@@ -66,7 +66,7 @@ void checkDirectiveCount(const std::map<string, int>& directiveCounts, const str
     {
         const string& directive = optionalDirectives[i];
         std::map<string, int>::const_iterator it = directiveCounts.find(directive);
-        if (it != directiveCounts.end() && it->second > 1)
+        if (it != directiveCounts.end() && it->second > 1 && directive != "error_page")
             throw std::runtime_error("⚠ Error: Optional directive '" + directive + "' appears more than once in " + blockType + ".");
     }
     for (std::map<string, int>::const_iterator it = directiveCounts.begin(); it != directiveCounts.end(); ++it) //DEBUG

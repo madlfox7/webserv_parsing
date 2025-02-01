@@ -146,7 +146,7 @@ void handleServerBlock(std::ifstream& file, const std::map<std::string, Directiv
         std::map<string, int>::iterator countIt = directiveCounts.find(directive);
         if (countIt != directiveCounts.end()) 
             countIt->second++;
-        if (directive == "listen" || directive == "location")
+        if (directive == "listen" || directive == "location" || directive == "error_page")
         {
             std::vector<string> args(words.begin() + 1, words.end());
             directiveArgs[directive].insert(directiveArgs[directive].end(), args.begin(), args.end());
