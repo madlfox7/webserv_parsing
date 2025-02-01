@@ -73,6 +73,6 @@ void handleErrorPageDirective(const string& line, std::ifstream&, int&);
 void handleClientMaxBodySizeDirective(const string& line, std::ifstream&, int&);
 void handleCgi(const string & line);
 void handleUploadDir(const string & line);
-
+bool checkPrefix(const string &line, const string &prefix);
 
 #endif

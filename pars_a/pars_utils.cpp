@@ -16,6 +16,18 @@ bool valid_code(const string& return_code)
 // } //exact match case
 
 
+bool checkPrefix(const string &line, const string &prefix)
+{
+    if (line.size() < prefix.size())
+        return false;
+    for (size_t i = 0; i < prefix.size(); i++)
+    {
+        if (line[i] != prefix[i])
+            return false;
+    }
+    return true;
+}
+
 void checkDirectiveCount(const std::map<string, int>& directiveCounts, const string& blockType)
 {
     const string necessaryDirectives_ServerBlock[] = {"listen", "location"};

@@ -25,8 +25,10 @@ void handleReturn(const string& line)
     std::vector<string> words = splitLine(line);
     if (words.size() != 3)
         throw std::runtime_error("⚠ Error: Invalid 'return' directive format. Expect two arguments.");
-    if (!valid_code(words[1]))
-        throw std::runtime_error("⚠ Error: Invalid 'return' http status code");
+     if (words[1] != "301")
+        throw std::runtime_error("⚠ Error: Invalid 'return' status code");
+    if (!(checkPrefix(words[2], "http://") || checkPrefix(words[2], "https://"))) ///doesn't strat with http:// https://
+        throw std::runtime_error("⚠ Error: Invalid 'return' extension prefix: Only http:// ot https:// allowed");
 }
 
 void handleRoot(const string& line)
@@ -65,8 +67,8 @@ void handleCgi(const string & line)
     std::vector<string> words = splitLine(line);
     if (words.size() != 3)
         throw std::runtime_error("⚠ Error: Invalid number of arguments for 'cgi_extension'. Expected exactly two arguments.");
-    if (words[1] != ".py" && words[1] != ".sh")   ///  what about "./py"???
-        throw std::runtime_error("⚠ Error: Invalid argument for 'autoindex'. Allowed values are 'on' or 'off'."); ////
+    // if (words[1] != ".py" && words[1] != ".sh")   ///  what about "./py"???
+    //     throw std::runtime_error("⚠ Error: ."); ////
 }
 
 void handleUploadDir(const string & line)
@@ -205,6 +207,8 @@ void handleLocationDirective(const string& line, std::ifstream& file, int& serve
     std::vector<string> words = splitLine(line);
     if (words.size() != 2)
         throw std::runtime_error("⚠ Error: Directive 'location' must have an argument.");
+    //if (words[1] ) if not starting from one slash / error 
+
     //TODO: check location path???
     string nextLine;
     if (!std::getline(file, nextLine) || nextLine != "{")
